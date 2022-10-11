@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using SM.Entities;
 using SM.Data;
 namespace SM.Controllers
 {
@@ -8,10 +7,10 @@ namespace SM.Controllers
     public class UsersController : ControllerBase
     {
 
-        private IDBContext _dbContext { get; set; }
+        private ApiDBContext _dbContext { get; set; }
 
-        public UsersController(IDBContext dBContext){
-            this._dbContext = dBContext;
+        public UsersController(){
+            this._dbContext = new ApiDBContext();
         }
 
 

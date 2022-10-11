@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SM.Data;
+using SM.Utils;
+using System.Security.Claims;
+
 namespace SM.Controllers
 {
     [ApiController]
@@ -15,7 +19,18 @@ namespace SM.Controllers
 
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetUsers(){
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            string userEmail = "";
+            if(identity != null) {
+                userEmail = identity.Claims.FirstOrDefault()!.Value;    
+            }
+            var user = _dbContext.Users.FirstOrDefault(user => user.Email == userEmail);
+            if(!AuthUtil.AuthorizePermissions(user!)){
+                return Unauthorized();
+            }
+
             return Ok(_dbContext.Users);
         }
 

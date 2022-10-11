@@ -1,11 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using SM.Dtos;
 using SM.Data;
 using SM.Entities;
-using System.Text;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
+using SM.Utils;
 
 namespace SM.Controllers
 {
@@ -17,55 +14,57 @@ namespace SM.Controllers
         private ApiDBContext _dbContext { get; set; }
         private IConfiguration _config;
 
-        public AuthController(IConfiguration configuration){
+        public AuthController(IConfiguration configuration)
+        {
             this._dbContext = new ApiDBContext();
             this._config = configuration;
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginUserDto loginUserDto){
-            var existingUser = _dbContext.Users.FirstOrDefault(user => user.Email == loginUserDto.Email && user.Password == loginUserDto.Password);
+        public IActionResult Login(LoginUserDto loginUserDto)
+        {
 
-            if(existingUser is null) {
-                return NotFound("No user exists with that credentials");
+            var existingUser = _dbContext.Users.FirstOrDefault(user => user.Email == loginUserDto.Email);
+
+            var isPasswordCorrect = BCrypt.Net.BCrypt.Verify(loginUserDto.Password, existingUser.Password);
+
+            if (existingUser is null || !isPasswordCorrect)
+            {
+                return NotFound("Invalid credentials");
             }
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[] {
-                new Claim(ClaimTypes.Email, existingUser.Email)
-            };
+            var jwt = AuthUtil.CreateToken(_config, existingUser.Email);
 
-            var token = new JwtSecurityToken(
-                issuer: _config["JWT:Issuer"],
-                audience: _config["JWT:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
-                signingCredentials: credentials
-            );
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-            return Ok(jwt);
+            return Ok(new { token = jwt });
 
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterUserDto registerUserDto){
-            var userExists = _dbContext.Users.FirstOrDefault(user => user.Email == registerUserDto.Email);
+        public IActionResult Register(RegisterUserDto registerUserDto)
+        {
+            var userExists = _dbContext.Users.FirstOrDefault(user => user.Email == registerUserDto.Email || user.Username == registerUserDto.Username);
 
-            if(userExists is not null) {
+            if (userExists is not null)
+            {
                 return BadRequest("User already exists, please login");
             }
 
-           var user = new User() {
-            UserId = Guid.NewGuid(),
-            Email = registerUserDto.Email,
-            Password = registerUserDto.Password,
-            Username = registerUserDto.Username,
-            CreatedAt = DateTimeOffset.Now
-           };
+            var password = registerUserDto.Password;
 
-           _dbContext.Users.Add(user);
-           _dbContext.SaveChanges();
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            
+            var user = new User()
+            {
+                UserId = Guid.NewGuid(),
+                Email = registerUserDto.Email,
+                Password = hashedPassword,
+                Username = registerUserDto.Username,
+                CreatedAt = DateTimeOffset.Now,
+                Role = "user"
+            };
+
+            _dbContext.Users.Add(user);
+            _dbContext.SaveChanges();
 
             return Ok(user);
 

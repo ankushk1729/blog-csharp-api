@@ -26,16 +26,22 @@ namespace SM.Controllers
                 return Unauthorized();
             }
 
-            return Ok(BlogUtil.AttachUsersToBlogs(_dbContext, _dbContext.Blogs));
+            var blogsData = BlogUtil.AttachUsersToBlogs(_dbContext, _dbContext.Blogs);
+
+            var blogs = blogsData.Select(blog => blog.AsDto());
+
+            return Ok(blogs);
         }
 
         [HttpGet("{id}")]
         [Authorize]
         public IActionResult GetBlog(Guid id){
-            var blog = BlogUtil.AttachUserToBlog(_dbContext, id);
-            if(blog is null) {
+            var blogData = BlogUtil.AttachUserToBlog(_dbContext, id);
+            if(blogData is null) {
                 return NotFound();
             }
+
+            var blog = blogData.AsDto();
 
             return Ok(blog);
         }
@@ -58,7 +64,7 @@ namespace SM.Controllers
             _dbContext.Blogs.Add(newBlog);
             _dbContext.SaveChanges();
 
-            return Ok(newBlog);
+            return Ok(newBlog.AsDto());
         }
 
     }

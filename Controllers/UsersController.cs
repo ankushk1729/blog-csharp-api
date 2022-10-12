@@ -25,7 +25,7 @@ namespace SM.Controllers
                 return Unauthorized();
             }
 
-            return Ok(_dbContext.Users);
+            return Ok(_dbContext.Users.Select(user => user.AsDto()));
         }
 
         [HttpGet("{id}")]
@@ -37,7 +37,7 @@ namespace SM.Controllers
                 return NotFound("No such user with id : " + id);
             }
 
-            return Ok(user);
+            return Ok(user.AsDto());
         }
     }
 }

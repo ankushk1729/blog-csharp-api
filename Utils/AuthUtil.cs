@@ -3,8 +3,8 @@ using System.Text;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using SM.Data;
+
 namespace SM.Utils
 {
     public static class AuthUtil
@@ -37,6 +37,17 @@ namespace SM.Utils
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+
+        public static User GetCurrentUser(ApiDBContext dBContext, HttpContext httpContext){
+            var identity = httpContext.User.Identity as ClaimsIdentity;
+            string userEmail = "";
+            if(identity != null) {
+                userEmail = identity.Claims.FirstOrDefault()!.Value;    
+            }
+            var user = dBContext.Users.FirstOrDefault(user => user.Email == userEmail);
+
+            return user;
         }
 
     }

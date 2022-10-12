@@ -17,6 +17,9 @@ namespace SM.Entities
         public User User {get; set;}
 
         [Required]
+        public Guid UserId {get; set;}
+
+        [Required]
         public int NumLikes { get; set; }
 
         [Required]

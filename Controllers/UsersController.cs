@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SM.Data;
 using SM.Utils;
-using System.Security.Claims;
 
 namespace SM.Controllers
 {
@@ -21,12 +20,7 @@ namespace SM.Controllers
         [HttpGet]
         [Authorize]
         public IActionResult GetUsers(){
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            string userEmail = "";
-            if(identity != null) {
-                userEmail = identity.Claims.FirstOrDefault()!.Value;    
-            }
-            var user = _dbContext.Users.FirstOrDefault(user => user.Email == userEmail);
+            var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
             if(!AuthUtil.AuthorizePermissions(user!)){
                 return Unauthorized();
             }
@@ -35,6 +29,7 @@ namespace SM.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public IActionResult GetUser(Guid id){
             var user = _dbContext.Users.FirstOrDefault(user => user.UserId == id);
 

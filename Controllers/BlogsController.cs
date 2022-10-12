@@ -97,5 +97,32 @@ namespace SM.Controllers
             return Ok("Blog deleted successfully");
         }
 
+        [HttpPatch("{id}")]
+        [Authorize]
+        public IActionResult UpdateBlog(Guid id, UpdateBlogDto updateBlogData) {
+            var blog = _dbContext.Blogs.FirstOrDefault(blog => blog.Id == id);
+
+            if(blog is null) {
+                return NotFound();
+            }
+
+            var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
+
+            if(!AuthUtil.AuthorizePermissions(user, blog)) {
+                return Unauthorized();
+            }
+
+            if(updateBlogData.Content != null) {
+                blog.Content = updateBlogData.Content;
+            }
+
+            if(updateBlogData.Cover != null) {
+                blog.Cover = updateBlogData.Cover;
+            }
+            _dbContext.SaveChanges();
+
+            return Ok("Blog updated successfully");
+        }
+
     }
 }

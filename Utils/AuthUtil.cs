@@ -11,12 +11,12 @@ namespace SM.Utils
     {
         public static bool AuthorizePermissions(User requestUser, Blog? resource = null)
         {
-            if (requestUser.Role != "admin" || (resource != null && resource!.User.UserId != requestUser.UserId))
+            if (requestUser.Role == "admin" || (resource != null && resource?.UserId == requestUser.UserId))
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public static string CreateToken(IConfiguration _config, string userEmail) {

@@ -75,5 +75,27 @@ namespace SM.Controllers
             return Ok(newBlog.AsDto());
         }
 
+        [HttpDelete("{id}")]
+        [Authorize]
+        public IActionResult DeleteBlog(Guid id) {
+            var blog = _dbContext.Blogs.FirstOrDefault(blog => blog.Id == id);
+
+            if(blog is null) {
+                return NotFound();
+            }
+
+            var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
+
+            if(!AuthUtil.AuthorizePermissions(user, blog)) {
+                return Unauthorized();
+            }
+
+            _dbContext.Blogs.Remove(blog);
+
+            _dbContext.SaveChanges();
+
+            return Ok("Blog deleted successfully");
+        }
+
     }
 }

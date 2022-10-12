@@ -46,6 +46,14 @@ namespace SM.Controllers
             return Ok(blog);
         }
 
+        [HttpGet("users/{id}")]
+        [Authorize]
+        public IActionResult GetUserBlogs(Guid id) {
+            var userBlogs = _dbContext.Blogs.Where(blog => blog.UserId == id);
+
+            return Ok(userBlogs);
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult CreateBlog(CreateBlogDto blogData) {

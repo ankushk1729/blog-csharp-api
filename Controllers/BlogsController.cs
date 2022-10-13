@@ -131,8 +131,12 @@ namespace SM.Controllers
         [HttpGet("search")]
         [Authorize]
         public IActionResult SearchBlogs(string q) {
-            System.Console.WriteLine(q);
-            return Ok(_dbContext.Blogs.Where(blog => blog.Content.Contains(q)).Select(blog => blog));
+            var blogs = new List<Blog>();
+            
+            blogs.AddRange(_dbContext.Blogs.Where(blog => blog.Title.Contains(q)).Select(blog => blog));
+            blogs.AddRange(_dbContext.Blogs.Where(blog => blog.Content.Contains(q)).Select(blog => blog));
+
+            return Ok(blogs);
         }
 
 

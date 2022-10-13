@@ -22,7 +22,7 @@ namespace SM.Controllers
         [Authorize]
         public IActionResult GetBlogs() {
             var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
-            if(!AuthUtil.AuthorizePermissions(user!)){
+            if(!AuthUtil.AuthorizePermissions(_dbContext, user!)){
                 return Unauthorized();
             }
 
@@ -85,7 +85,7 @@ namespace SM.Controllers
 
             var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
 
-            if(!AuthUtil.AuthorizePermissions(user, blog)) {
+            if(!AuthUtil.AuthorizePermissions(_dbContext, user, blog)) {
                 return Unauthorized();
             }
 
@@ -107,7 +107,7 @@ namespace SM.Controllers
 
             var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
 
-            if(!AuthUtil.AuthorizePermissions(user, blog)) {
+            if(!AuthUtil.AuthorizePermissions(_dbContext, user, blog)) {
                 return Unauthorized();
             }
 

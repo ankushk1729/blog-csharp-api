@@ -13,8 +13,6 @@ namespace SM.Dtos
         [Required]
         public string Email { get; set; }
 
-        public string Role {get; init;}
-
         [Required]
         public DateTimeOffset CreatedAt { get; set; }
     }

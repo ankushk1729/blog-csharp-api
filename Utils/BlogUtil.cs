@@ -10,7 +10,7 @@ namespace SM.Utils
             return dBContext.Blogs.Join(
                 dBContext.Users,
                  blog => blog.UserId, user => user.UserId,
-                  (blog, user) => new Blog() { Id = blog.Id, Content = blog.Content, Cover = blog.Cover, User = new() { UserId = user.UserId, Username = user.Username, Email = user.Email, CreatedAt = user.CreatedAt, Role = user.Role }, UserId = blog.UserId, CreatedAt = blog.CreatedAt }).FirstOrDefault(blog => blog.Id == id)!;
+                  (blog, user) => new Blog() { Id = blog.Id, Content = blog.Content, Cover = blog.Cover, User = new() { UserId = user.UserId, Username = user.Username, Email = user.Email, CreatedAt = user.CreatedAt }, UserId = blog.UserId, CreatedAt = blog.CreatedAt }).FirstOrDefault(blog => blog.Id == id)!;
             
         }
 
@@ -19,7 +19,7 @@ namespace SM.Utils
             return dBContext.Blogs.Join(
                 dBContext.Users,
                  blog => blog.UserId, user => user.UserId,
-                  (blog, user) => new Blog() { Id = blog.Id, Content = blog.Content, Cover = blog.Cover, User = new() { UserId = user.UserId, Username = user.Username, Email = user.Email, CreatedAt = user.CreatedAt, Role = user.Role }, UserId = blog.UserId, CreatedAt = blog.CreatedAt })!;
+                  (blog, user) => new Blog() { Id = blog.Id, Content = blog.Content, Cover = blog.Cover, User = new() { UserId = user.UserId, Username = user.Username, Email = user.Email, CreatedAt = user.CreatedAt }, UserId = blog.UserId, CreatedAt = blog.CreatedAt })!;
         }
     }
 }

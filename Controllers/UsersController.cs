@@ -21,7 +21,7 @@ namespace SM.Controllers
         [Authorize]
         public IActionResult GetUsers(){
             var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
-            if(!AuthUtil.AuthorizePermissions(user!)){
+            if(!AuthUtil.AuthorizePermissions(_dbContext, user!)){
                 return Unauthorized();
             }
 

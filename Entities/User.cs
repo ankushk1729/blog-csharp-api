@@ -17,9 +17,6 @@ namespace SM.Entities
         public string Password { get; set; }
 
         [Required]
-        public string Role {get; init;}
-
-        [Required]
         public DateTimeOffset CreatedAt { get; set; }
     }
 }

@@ -60,11 +60,14 @@ namespace SM.Controllers
                 Password = hashedPassword,
                 Username = registerUserDto.Username,
                 CreatedAt = DateTimeOffset.Now,
-                Role = "user"
             };
 
             _dbContext.Users.Add(user);
+
             _dbContext.SaveChanges();
+            
+            UserUtil.CreateUserRoleMapping(_dbContext, user, "user");
+
 
             return Ok(user);
 

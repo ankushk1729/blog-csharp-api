@@ -8,6 +8,10 @@ namespace SM.Data
 
         public DbSet<Blog> Blogs { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<UserRole> UserRoles { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=localhost;Initial Catalog=sm;Integrated Security=True");

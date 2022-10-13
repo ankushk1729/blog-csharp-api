@@ -9,9 +9,9 @@ namespace SM.Utils
 {
     public static class AuthUtil
     {
-        public static bool AuthorizePermissions(User requestUser, Blog? resource = null)
+        public static bool AuthorizePermissions(ApiDBContext dBContext, User requestUser, Blog? resource = null)
         {
-            if (requestUser.Role == "admin" || (resource != null && resource?.UserId == requestUser.UserId))
+            if (UserUtil.GetUserRole(dBContext, requestUser.UserId) == "admin" || (resource != null && resource?.UserId == requestUser.UserId))
             {
                 return true;
             }

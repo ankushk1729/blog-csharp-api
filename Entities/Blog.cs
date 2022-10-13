@@ -20,9 +20,6 @@ namespace SM.Entities
         public Guid UserId {get; set;}
 
         [Required]
-        public int NumLikes { get; set; }
-
-        [Required]
         public DateTimeOffset CreatedAt { get; set; }
 
     }

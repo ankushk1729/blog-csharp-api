@@ -16,6 +16,7 @@ namespace SM.Entities
         [Required]
         public string Password { get; set; }
 
+        [Required]
         public string Role {get; init;}
 
         [Required]

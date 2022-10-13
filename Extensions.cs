@@ -4,7 +4,7 @@ namespace SM
 {
     public static class Extensions {
         public static BlogDto AsDto(this Blog blog){
-            return new BlogDto() {Id = blog.Id, Content = blog.Content, Cover = blog.Cover, CreatedAt = blog.CreatedAt, UserId = blog.UserId, NumLikes = blog.NumLikes, User = new UserDto() { UserId = blog.User.UserId, Username = blog.User.Username, Email = blog.User.Email, CreatedAt = blog.User.CreatedAt, Role = blog.User.Role}};
+            return new BlogDto() {Id = blog.Id, Content = blog.Content, Cover = blog.Cover, CreatedAt = blog.CreatedAt, UserId = blog.UserId, User = new UserDto() { UserId = blog.User.UserId, Username = blog.User.Username, Email = blog.User.Email, CreatedAt = blog.User.CreatedAt, Role = blog.User.Role}};
         }
 
         public static UserDto AsDto(this User user) {

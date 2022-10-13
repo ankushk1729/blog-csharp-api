@@ -64,7 +64,6 @@ namespace SM.Controllers
                 CreatedAt = DateTimeOffset.Now,
                 Content = blogData.Content,
                 Cover = blogData.Cover,
-                NumLikes = 0,
                 User = user,
                 UserId = user.UserId
             };

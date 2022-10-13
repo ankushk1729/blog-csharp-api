@@ -62,6 +62,7 @@ namespace SM.Controllers
             var newBlog = new Blog() {
                 Id = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.Now,
+                Title = blogData.Title,
                 Content = blogData.Content,
                 Cover = blogData.Cover,
                 User = user,
@@ -109,6 +110,10 @@ namespace SM.Controllers
 
             if(!AuthUtil.AuthorizePermissions(_dbContext, user, blog)) {
                 return Unauthorized();
+            }
+
+            if(updateBlogData.Title != null) {
+                blog.Title = updateBlogData.Title;
             }
 
             if(updateBlogData.Content != null) {

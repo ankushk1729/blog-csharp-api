@@ -123,5 +123,13 @@ namespace SM.Controllers
             return Ok("Blog updated successfully");
         }
 
+        [HttpGet("search")]
+        [Authorize]
+        public IActionResult SearchBlogs(string q) {
+            System.Console.WriteLine(q);
+            return Ok(_dbContext.Blogs.Where(blog => blog.Content.Contains(q)).Select(blog => blog));
+        }
+
+
     }
 }

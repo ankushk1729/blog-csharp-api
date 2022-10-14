@@ -12,6 +12,9 @@ namespace SM.Data
 
         public DbSet<UserRole> UserRoles { get; set; }
 
+        public DbSet<Comment> Comments { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=localhost;Initial Catalog=sm;Integrated Security=True");

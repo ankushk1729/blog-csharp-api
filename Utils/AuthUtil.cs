@@ -9,9 +9,21 @@ namespace SM.Utils
 {
     public static class AuthUtil
     {
-        public static bool AuthorizePermissions(ApiDBContext dBContext, User requestUser, Blog? resource = null)
+        public static bool AuthorizePermissions(ApiDBContext dBContext, User requestUser, object? resource = null)
         {
-            if (UserUtil.GetUserRole(dBContext, requestUser.UserId) == "admin" || (resource != null && resource?.UserId == requestUser.UserId))
+             if(resource != null && resource.GetType() == typeof(Blog)) {
+                if((resource as Blog)!.UserId == requestUser.UserId) {
+                    return true;
+                }
+            } 
+
+            if(resource != null && resource.GetType() == typeof(Comment)) {
+                if((resource as Comment)!.UserId == requestUser.UserId) {
+                    return true;
+                }
+            } 
+
+            if (UserUtil.GetUserRole(dBContext, requestUser.UserId) == "admin")
             {
                 return true;
             }

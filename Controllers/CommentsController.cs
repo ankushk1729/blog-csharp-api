@@ -70,5 +70,27 @@ namespace SM.Controllers
             return Ok(comm.AsDto());
 
         }
+
+        [HttpDelete("{id}")]
+        [Authorize]
+        public IActionResult DeleteComment(Guid id) {
+            var comment = _dbContext.Comments.FirstOrDefault(c => c.Id == id);
+
+            if(comment is null) {
+                return NotFound("No comment with id : " + id);
+            }
+
+            var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
+
+            if(!AuthUtil.AuthorizePermissions(_dbContext, user, comment)) {
+                return Unauthorized();
+            }
+
+            _dbContext.Comments.Remove(comment);
+            _dbContext.SaveChanges();
+
+            return Ok("Comment deleted");
+
+        }
     }  
 }

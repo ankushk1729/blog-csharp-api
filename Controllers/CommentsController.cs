@@ -40,6 +40,25 @@ namespace SM.Controllers
             return Ok(comment.AsDto());
         }
 
+        [HttpGet("users/{id}")]
+        [Authorize]
+        public IActionResult GetUserComments(Guid id) {
+            var currentUser = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
+
+            if(!AuthUtil.AuthorizePermissions(_dbContext, currentUser)) {
+                return NotFound();
+            }
+
+            var commentsData = _dbContext.Comments.Where(c => c.UserId == id);
+
+            List<object> comments = new List<object>();
+            foreach(Comment c in commentsData) {
+                comments.Add(new { Id = c.Id, Text = c.Text, BlogId = c.BlogId, CreatedAt = c.CreatedAt});
+            }
+
+            return Ok(comments);
+        }
+
         [HttpPost]
         [Authorize]
         public IActionResult CreateComment(CreateCommentDto commentData) {

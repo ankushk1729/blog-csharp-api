@@ -49,8 +49,13 @@ namespace SM.Controllers
         [HttpGet("users/{id}")]
         [Authorize]
         public IActionResult GetUserBlogs(Guid id) {
-            var userBlogs = _dbContext.Blogs.Where(blog => blog.UserId == id);
+            var userBlogsData = _dbContext.Blogs.Where(blog => blog.UserId == id);
 
+            List<object> userBlogs = new List<object>();
+
+            foreach(Blog b in userBlogsData) {
+                userBlogs.Add(new { Id = b.Id, Title = b.Title, Content = b.Content, Cover = b.Cover, UserId = b.UserId, CreatedAt = b.CreatedAt});
+            }
             return Ok(userBlogs);
         }
 

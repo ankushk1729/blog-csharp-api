@@ -12,32 +12,51 @@ namespace SM.Controllers
 
         private ApiDBContext _dbContext { get; set; }
 
-        public UsersController(){
+        public UsersController()
+        {
             this._dbContext = new ApiDBContext();
         }
 
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetUsers(){
-            var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
-            if(!AuthUtil.AuthorizePermissions(_dbContext, user!)){
-                return Unauthorized();
-            }
+        public IActionResult GetUsers()
+        {
+            try
+            {
+                var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
+                if (!AuthUtil.AuthorizePermissions(_dbContext, user!))
+                {
+                    return Unauthorized();
+                }
 
-            return Ok(_dbContext.Users.Select(user => user.AsDto()));
+                return Ok(_dbContext.Users.Select(user => user.AsDto()));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public IActionResult GetUser(Guid id){
-            var user = _dbContext.Users.FirstOrDefault(user => user.UserId == id);
+        public IActionResult GetUser(Guid id)
+        {
+            try
+            {
+                var user = _dbContext.Users.FirstOrDefault(user => user.UserId == id);
 
-            if(user is null) {
-                return NotFound("No such user with id : " + id);
+                if (user is null)
+                {
+                    return NotFound("No such user with id : " + id);
+                }
+
+                return Ok(user.AsDto());
             }
-
-            return Ok(user.AsDto());
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

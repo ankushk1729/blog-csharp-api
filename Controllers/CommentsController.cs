@@ -62,9 +62,9 @@ namespace SM.Controllers
             }
         }
 
-        [HttpGet("users/{id}")]
+        [HttpGet("users/{name}")]
         [Authorize]
-        public IActionResult GetUserComments(Guid id)
+        public IActionResult GetUserComments(string name)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace SM.Controllers
                     return NotFound();
                 }
 
-                var commentsData = _dbContext.Comments.Where(c => c.UserId == id);
+                var commentsData = _dbContext.Comments.Where(c => c.User.Username == name);
 
                 List<object> comments = new List<object>();
                 foreach (Comment c in commentsData)

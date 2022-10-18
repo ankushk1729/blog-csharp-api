@@ -38,17 +38,17 @@ namespace SM.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{name}")]
         [Authorize]
-        public IActionResult GetUser(Guid id)
+        public IActionResult GetUser(string name)
         {
             try
             {
-                var user = _dbContext.Users.FirstOrDefault(user => user.UserId == id);
+                var user = _dbContext.Users.FirstOrDefault(user => user.Username == name);
 
                 if (user is null)
                 {
-                    return NotFound("No such user with id : " + id);
+                    return NotFound("No such user with username : " + name);
                 }
 
                 return Ok(user.AsDto());

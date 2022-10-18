@@ -68,13 +68,13 @@ namespace SM.Controllers
             }
         }
 
-        [HttpGet("users/{id}")]
+        [HttpGet("users/{name}")]
         [Authorize]
-        public IActionResult GetUserBlogs(Guid id)
+        public IActionResult GetUserBlogs(string name)
         {
             try
             {
-                var userBlogsData = _dbContext.Blogs.Where(blog => blog.UserId == id);
+                var userBlogsData = _dbContext.Blogs.Where(blog => blog.User.Username == name);
 
                 List<object> userBlogs = new List<object>();
 

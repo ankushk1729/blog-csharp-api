@@ -7,13 +7,13 @@ namespace SM.Entities
         [Key]
         public Guid UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Username should be unique")]
         public string Username { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Invalid email")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Password length should be more than 8 characters")]
         public string Password { get; set; }
 
         [Required]

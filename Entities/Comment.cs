@@ -6,7 +6,7 @@ namespace SM.Entities
         [Required]
         public Guid Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Comment text is required")]
         public string Text { get; set; }
 
         public User User { get; set; }

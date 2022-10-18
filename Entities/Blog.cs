@@ -7,13 +7,13 @@ namespace SM.Entities
         [Required]
         public Guid Id {get; set;}
 
-        [Required]
+        [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Content is required")]
         public string Content { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Cover is required")]
         public string Cover { get; set; }
         
         [Required]

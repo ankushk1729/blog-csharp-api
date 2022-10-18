@@ -4,6 +4,7 @@ using SM.Data;
 using SM.Utils;
 using SM.Dtos;
 using SM.Entities;
+using AutoMapper;
 
 namespace SM.Controllers
 {
@@ -14,9 +15,12 @@ namespace SM.Controllers
 
         private ApiDBContext _dbContext;
 
-        public CommentsController()
+        public IMapper _mapper;
+
+        public CommentsController(IMapper mapper)
         {
             this._dbContext = new ApiDBContext();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -102,16 +106,12 @@ namespace SM.Controllers
 
                 var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
 
-                var comment = new Comment()
-                {
-                    Id = Guid.NewGuid(),
-                    Text = commentData.Text,
-                    User = user,
-                    UserId = user.UserId,
-                    Blog = blog,
-                    BlogId = blog.Id,
-                    CreatedAt = DateTimeOffset.Now,
-                };
+                var comment = _mapper.Map<Comment>(commentData);
+                comment.Id = Guid.NewGuid();
+                comment.User = user;
+                comment.UserId = user.UserId;
+                comment.Blog = blog;
+                comment.CreatedAt = DateTimeOffset.Now;
 
                 _dbContext.Comments.Add(comment);
 

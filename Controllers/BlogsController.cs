@@ -4,6 +4,7 @@ using SM.Data;
 using SM.Utils;
 using SM.Dtos;
 using SM.Entities;
+using AutoMapper;
 
 namespace SM.Controllers
 {
@@ -13,10 +14,12 @@ namespace SM.Controllers
     public class BlogsController : ControllerBase
     {
         private ApiDBContext _dbContext { get; set; }
+        private readonly IMapper _mapper;
 
-        public BlogsController()
+        public BlogsController(IMapper mapper)
         {
             this._dbContext = new ApiDBContext();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -95,24 +98,21 @@ namespace SM.Controllers
             {
                 var user = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
 
-                var newBlog = new Blog()
-                {
-                    Id = Guid.NewGuid(),
-                    CreatedAt = DateTimeOffset.Now,
-                    Title = blogData.Title,
-                    Content = blogData.Content,
-                    Cover = blogData.Cover,
-                    User = user,
-                    UserId = user.UserId
-                };
+                var newBlog = _mapper.Map<Blog>(blogData);
+                newBlog.Id = Guid.NewGuid();
+                newBlog.User = user;
+                newBlog.UserId = user.UserId;
+                newBlog.CreatedAt = DateTimeOffset.Now;
+
 
                 _dbContext.Blogs.Add(newBlog);
                 _dbContext.SaveChanges();
 
                 return Ok(newBlog.AsDto());
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                System.Console.WriteLine(e);
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }

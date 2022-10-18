@@ -17,9 +17,9 @@ namespace SM.Controllers
 
         public IMapper _mapper;
 
-        public CommentsController(IMapper mapper)
+        public CommentsController(IMapper mapper, ApiDBContext dBContext)
         {
-            this._dbContext = new ApiDBContext();
+            this._dbContext = dBContext;
             _mapper = mapper;
         }
 

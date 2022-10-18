@@ -16,9 +16,9 @@ namespace SM.Controllers
         private ApiDBContext _dbContext { get; set; }
         private readonly IMapper _mapper;
 
-        public BlogsController(IMapper mapper)
+        public BlogsController(IMapper mapper, ApiDBContext dBContext)
         {
-            this._dbContext = new ApiDBContext();
+            this._dbContext = dBContext;
             _mapper = mapper;
         }
 

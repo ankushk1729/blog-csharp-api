@@ -12,9 +12,9 @@ namespace SM.Controllers
 
         private ApiDBContext _dbContext { get; set; }
 
-        public UsersController()
+        public UsersController(ApiDBContext dBContext)
         {
-            this._dbContext = new ApiDBContext();
+            this._dbContext = dBContext;
         }
 
 

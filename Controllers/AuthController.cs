@@ -14,9 +14,9 @@ namespace SM.Controllers
         private ApiDBContext _dbContext { get; set; }
         private IConfiguration _config;
 
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration, ApiDBContext dBContext)
         {
-            this._dbContext = new ApiDBContext();
+            this._dbContext = dBContext;
             this._config = configuration;
         }
 

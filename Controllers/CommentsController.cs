@@ -70,11 +70,6 @@ namespace SM.Controllers
             {
                 var currentUser = AuthUtil.GetCurrentUser(_dbContext, HttpContext);
 
-                if (!AuthUtil.AuthorizePermissions(_dbContext, currentUser))
-                {
-                    return NotFound();
-                }
-
                 var commentsData = _dbContext.Comments.Where(c => c.User.Username == name);
 
                 List<object> comments = new List<object>();
